@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  web:
+    build: ./backend
+    container_name: backend
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+    restart: on-failure
+    volumes:
+      - ./backend:/backend
+    ports:
+      - "5000:5000"
+    command: python main.py
