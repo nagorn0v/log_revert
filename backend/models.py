@@ -1,3 +1,5 @@
+import datetime
+
 from sqlalchemy.sql import expression
 
 from app import db
@@ -15,6 +17,17 @@ class Task(db.Model):
     def __repr__(self):
         return f'<Task {self.title}>'
 
+    def as_dict(self):
+        task = {}
+        for column in self.__table__.columns:
+            column_value = getattr(self, column.name)
+            if isinstance(column_value, datetime.datetime):
+                task[column.name] =column_value.isoformat()
+            else:
+                task[column.name] = column_value
+        return task
+        # return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 
 class List(db.Model):
     __tablename__ = 'lists'
@@ -24,3 +37,9 @@ class List(db.Model):
     color = db.Column(db.String(128))
     is_archived = db.Column(db.Boolean)
     task = db.relationship('Task')
+
+    def __repr__(self):
+        return f'<List {self.name}>'
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
