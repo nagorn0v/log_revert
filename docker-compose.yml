@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  web:
+  backend:
     build: ./backend
     container_name: backend
     environment:
@@ -12,4 +12,4 @@ services:
       - ./backend:/backend
     ports:
       - "5000:5000"
-    command: python main.py
+    command: python app.py
