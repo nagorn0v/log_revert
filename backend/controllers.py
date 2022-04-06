@@ -12,7 +12,7 @@ def hello_world():
 
 
 @app.route('/lists', methods=['GET', 'POST'])
-def read_create_lists() -> Response:
+def read_create_lists():
     if request.method == 'GET':
         lists = List.query.all()
         return jsonify([list.as_dict() for list in lists])
@@ -21,17 +21,17 @@ def read_create_lists() -> Response:
 
         try:  # todo test key error
             list = List(name=data['name'], color=data['color'], is_archived=False)
-        except KeyError:
-            return '<h1>Bar request</h1>'
+        except KeyError as e:
+            field = str(e).strip("'")
+            return jsonify({'message': f'{field} field not found'}), 400
 
         db.session.add(list)
 
         try:
             db.session.commit()
-        except Exception as e:
-            print(e)
+        except Exception:
             db.session.rollback()
-            return '<h1>External server error</h1>'
+            return jsonify({'message': 'Internal server error'}), 500
         else:
             return jsonify(list.as_dict())
 
@@ -44,7 +44,7 @@ def read_update_list(list_id: int):
         if list:  # todo test found
             return jsonify(list.as_dict())
         else:  # todo test not found
-            return '<h1>not found</h1>'
+            return jsonify({'message': f'List with id {list_id} not found'}), 404
 
     elif request.method == 'PATCH':
         data = request.json
@@ -54,10 +54,10 @@ def read_update_list(list_id: int):
         db.session.add(list)
 
         try:
-            db.session.rollback()
             db.session.commit()
         except Exception:
-            return '<h1>Internal server error</h1>'
+            db.session.rollback()
+            return jsonify({'message': 'Internal server error'}), 500
         else:
             return jsonify(list.as_dict())
 
@@ -75,18 +75,17 @@ def read_create_tasks():
                         due_date=datetime.datetime.strptime(data['due_date'], '%Y-%m-%dT%H:%M:%S'),
                         list_id=data['list_id'])
 
-        except KeyError:
-            return '<h1>bad request</h1>'
+        except KeyError as e:
+            field = str(e).strip("'")
+            return jsonify({'message': f'{field} field not found'}), 400
 
-        print(task)
         db.session.add(task)
 
         try:
             db.session.commit()
         except Exception as e:
-            print(e)
             db.session.rollback()
-            return '<h1>External server error</h1>'
+            return jsonify({'message': 'Internal server error'}), 500
         else:
             return jsonify(task.as_dict())
 
@@ -98,8 +97,7 @@ def read_update_task(task_id: int):
         if task:
             return jsonify(task.as_dict())
         else:
-            # todo response not found
-            pass
+            return jsonify({'message': f'Task with id {task_id} not found'}), 404
     elif request.method == 'PATCH':
         data = request.json
 
@@ -114,6 +112,6 @@ def read_update_task(task_id: int):
             db.session.commit()
         except Exception:
             db.session.rollback()
-            return '<h1>Internal server error</h1>'
+            return jsonify({'message': 'Internal server error'}), 500
         else:
             return jsonify(task.as_dict())
