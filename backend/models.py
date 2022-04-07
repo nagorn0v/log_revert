@@ -22,7 +22,7 @@ class Task(db.Model):
         for column in self.__table__.columns:
             column_value = getattr(self, column.name)
             if isinstance(column_value, datetime.datetime):
-                task[column.name] =column_value.isoformat()
+                task[column.name] = column_value.isoformat()
             else:
                 task[column.name] = column_value
         return task
