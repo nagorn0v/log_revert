@@ -1,5 +1,10 @@
+import json
+import os.path
+import re
+
 from flask import request, jsonify
 from app import app, db
+from config import basedir
 from models import List, Task
 
 from utils import format_json_date
@@ -76,8 +81,6 @@ def read_update_list(list_id: int):
                 return jsonify(list.as_dict())
     else:
         return jsonify({'message': f'List with id {list_id} not found'}), 404
-
-
 
 
 @app.route('/tasks', methods=['GET', 'POST'])
@@ -157,3 +160,18 @@ def update_list_task(list_id: int, task_id: int):
         return jsonify({'message': str(e.__dict__['orig'])}), 400
     else:
         return jsonify([list.as_dict(), task.as_dict()]), 200
+
+
+@app.route('/changes', methods=['GET'])
+def get_user_changes():
+    user_id = request.headers['x-user-id']
+    with open(os.path.join(basedir, 'logs', f'{user_id}.log')) as f:
+        changes = []
+        for i, line in enumerate(f, 1):
+            log = re.findall(r'\d\d\d\d-\d\d-\d\d\ \d\d:\d\d:\d\d.\d{6}|\[.*?\]', line)
+            print(log[1])
+            changes.append({'id': i, 'timestamp': log[0], 'action': json.dumps(log[1])})
+    return jsonify(changes)
+
+
+# @app.route('/changes')
