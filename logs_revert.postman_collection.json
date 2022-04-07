@@ -12,7 +12,13 @@
 					"name": "get list of lists",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "X-USER-ID",
+								"value": "1",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "http://127.0.0.1:5000/lists",
 							"protocol": "http",
@@ -34,10 +40,16 @@
 					"name": "add new list",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "X-USER-ID",
+								"value": "1",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"name\": \"to do\", \"color\": \"red\"}",
+							"raw": "{\"name\": \"to do1\", \"color\": \"red\"}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -65,27 +77,15 @@
 					"name": "get specific list",
 					"request": {
 						"method": "GET",
-						"header": [],
-						"url": null
-					},
-					"response": []
-				},
-				{
-					"name": "update specific list",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"colo\": \"red\"}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
+						"header": [
+							{
+								"key": "X-USER-ID",
+								"value": "1",
+								"type": "text"
 							}
-						},
+						],
 						"url": {
-							"raw": "http://127.0.0.1:5000/lists/2",
+							"raw": "http://127.0.0.1:5000/lists/1",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -96,7 +96,45 @@
 							"port": "5000",
 							"path": [
 								"lists",
-								"2"
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update specific list",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "X-USER-ID",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"color\": \"wite\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/lists/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"lists",
+								"1"
 							]
 						}
 					},
@@ -111,8 +149,27 @@
 					"name": "get list of tasks",
 					"request": {
 						"method": "GET",
-						"header": [],
-						"url": null
+						"header": [
+							{
+								"key": "X-USER-ID",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:5000/tasks",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"tasks"
+							]
+						}
 					},
 					"response": []
 				},
@@ -120,7 +177,22 @@
 					"name": "create task",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "X-USER-ID",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"title\": \"test t\", \"description\": \"test description\", \"due_date\": \"2022-04-02T14:30:00\", \"list_id\": 2}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://127.0.0.1:5000/tasks",
 							"protocol": "http",
@@ -142,7 +214,13 @@
 					"name": "get specified task",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "X-USER-ID",
+								"value": "1",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "http://127.0.0.1:5000/tasks/1",
 							"protocol": "http",
@@ -165,10 +243,16 @@
 					"name": "update specified task",
 					"request": {
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "X-USER-ID",
+								"value": "1",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"title\": \"updated title\"}",
+							"raw": "{\"due_date\": \"2022-06-02T14:30:00\"}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -194,6 +278,46 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "update list and task",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "X-USER-ID",
+						"value": "1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"list\": {\"name\": \"new name\", \"color\": \"red\"}, \"task\": {\"title\": \"new title\"}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/lists/1/tasks/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"lists",
+						"1",
+						"tasks",
+						"1"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
