@@ -22,7 +22,7 @@ class Task(db.Model):
         for column in self.__table__.columns:
             column_value = getattr(self, column.name)
             if isinstance(column_value, datetime.datetime):
-                task[column.name] =column_value.isoformat()
+                task[column.name] = column_value.isoformat()
             else:
                 task[column.name] = column_value
         return task
@@ -36,7 +36,6 @@ class List(db.Model):
     name = db.Column(db.String(128), nullable=False)
     color = db.Column(db.String(128))
     is_archived = db.Column(db.Boolean)
-    task = db.relationship('Task')
 
     def __repr__(self):
         return f'<List {self.name}>'
