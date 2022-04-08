@@ -36,7 +36,6 @@ class List(db.Model):
     name = db.Column(db.String(128), nullable=False)
     color = db.Column(db.String(128))
     is_archived = db.Column(db.Boolean)
-    task = db.relationship('Task')
 
     def __repr__(self):
         return f'<List {self.name}>'

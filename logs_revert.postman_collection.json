@@ -115,7 +115,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"color\": \"wite\"}",
+							"raw": "{\"color\": \"white\"}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -186,7 +186,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"title\": \"test t\", \"description\": \"test description\", \"due_date\": \"2022-04-02T14:30:00\", \"list_id\": 2}",
+							"raw": "{\"title\": \"test t\", \"description\": \"test description\", \"due_date\": \"2022-04-02T14:30:00\", \"list_id\": 1}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -276,6 +276,97 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "delete task",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-user-id",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:5000/tasks/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"tasks",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "actions",
+			"item": [
+				{
+					"name": "get actions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-user-id",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:5000/actions",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"actions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "undo action",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-user-id",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:5000/actions/undo",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"actions",
+								"undo"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -292,7 +383,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"list\": {\"name\": \"new name\", \"color\": \"red\"}, \"task\": {\"title\": \"new title\"}}",
+					"raw": "{\"list\": {\"name\": \"patch name 1\", \"color\": \"red\"}, \"task\": {\"title\": \"patch title 1\"}}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -314,6 +405,43 @@
 						"1",
 						"tasks",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "modificate few models",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-user-id",
+						"value": "1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"create\": [{\"model_name\": \"Task\", \"title\": \"test t\", \"description\": \"test description\",                   \"due_date\":\"2022-04-02T14:30:00\", \"list_id\": 1},\n            {\"model_name\": \"List\", \"name\": \"to do 2\", \"color\": \"blue\"}], \n \"update\": [{\"model_name\": \"List\", \"model_id\": 2, \"color\": \"white\"},\n             {\"model_name\": \"Task\", \"model_id\": 2, \"due_date\": \"2022-06-02T14:30:00\"}], \"delete\": [{\"model_name\": \"List\", \"model_id\": 1}, {\"model_name\": \"Task\", \"model_id\": 1}]}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/modifications",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"modifications"
 					]
 				}
 			},

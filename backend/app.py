@@ -1,16 +1,17 @@
 import os.path
 
 import pathlib
+import re
 
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy, models_committed
 
-from config import Config
+from config import Config, basedir
 
 app = Flask(__name__)
 app.config.from_object(Config)
-db = SQLAlchemy(app)
+db = SQLAlchemy(app, session_options={"autoflush": False})
 migrate = Migrate(app, db)
 
 from controllers import *
@@ -57,11 +58,14 @@ def write_log(app, changes):
                                 model[key] = value.isoformat()
                             else:
                                 model[key] = value
-                    models.append({i[0].__tablename__: model})
-                log = log + ' ' + json.dumps(models, default=str)
+                    else:
+                        model['commit_type'] = i[1]
+                        model['model_name'] = re.search(r"(?<=\.)(.*?)(?=\')", str(type(i[0]))).group()
+                    models.append(model)
+                log = log + ' ' + json.dumps(models, default=str, sort_keys=True)
                 f.write(log + '\n')
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', use_reloader=False, debug=True)
+    app.run(host='0.0.0.0', debug=True)
     pathlib.Path('/logs').mkdir(parents=True, exist_ok=True)
