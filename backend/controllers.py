@@ -273,7 +273,7 @@ def undo_user_changes():
     except exc.SQLAlchemyError as e:
         return jsonify({'message': str(e.__dict__['orig'])}), 500
 
-    except FileNotFoundError:
+    except (FileNotFoundError, IndexError):
         return jsonify({'message': 'There are no actions to undo '}), 400
     else:
         return jsonify({'message': 'Successfully undo'}), 200
