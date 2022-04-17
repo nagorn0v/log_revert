@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c4f90f28-0bd2-4d6f-ae88-b44f9dcfdb90",
+		"_postman_id": "8c83f472-b1fd-48d5-9299-d5d499729253",
 		"name": "logs_revert Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -427,6 +427,96 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\"create\": [{\"model_name\": \"Task\", \"title\": \"test t\", \"description\": \"test description\",                   \"due_date\":\"2022-04-02T14:30:00\", \"list_id\": 1},\n            {\"model_name\": \"List\", \"name\": \"to do 2\", \"color\": \"blue\"}], \n \"update\": [{\"model_name\": \"List\", \"model_id\": 2, \"color\": \"white\"},\n             {\"model_name\": \"Task\", \"model_id\": 2, \"due_date\": \"2022-06-02T14:30:00\"}], \"delete\": [{\"model_name\": \"List\", \"model_id\": 1}, {\"model_name\": \"Task\", \"model_id\": 1}]}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/modifications",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"modifications"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "test",
+			"item": [
+				{
+					"name": "create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-user-id",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"create\": [\n            {\"model_name\": \"List\", \"name\": \"to do 1\", \"color\": \"blue\", \"id\": 2},\n            {\"model_name\": \"List\", \"name\": \"to do 2\", \"color\": \"blue\", \"id\": 3},\n            {\"model_name\": \"List\", \"name\": \"to do 3\", \"color\": \"blue\", \"id\": 4},\n            {\"model_name\": \"Task\", \"title\": \"test 1\", \"description\": \"test description 1\",                   \"due_date\":\"2022-04-02T14:30:00\", \"list_id\": 1},\n            {\"model_name\": \"Task\", \"title\": \"test 2\", \"description\": \"test description 2\",                   \"due_date\":\"2022-04-02T14:30:00\", \"list_id\": 1},\n            {\"model_name\": \"Task\", \"title\": \"test 3\", \"description\": \"test description 3\",                   \"due_date\":\"2022-04-02T14:30:00\", \"list_id\": 1}]}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/modifications",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"modifications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-user-id",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"update\": [{\"model_name\": \"List\", \"model_id\": 2, \"name\": \"to do 112\"},\n            {\"model_name\": \"List\", \"model_id\": 3, \"name\": \"to do 222\"},\n            {\"model_name\": \"Task\", \"model_id\": 1, \"title\": \"test t11\"},\n            {\"model_name\": \"Task\", \"model_id\": 2, \"title\": \"test t12\"}]}",
 							"options": {
 								"raw": {
 									"language": "json"
