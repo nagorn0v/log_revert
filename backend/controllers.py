@@ -193,8 +193,8 @@ def make_modifications():
                 return jsonify({'message': f'{e}'}), 400
             except exc.SQLAlchemyError as e:
                 return jsonify({'message': str(e.__dict__.get('orig', 'DB error'))}), 400
-        else:
-            db.session.commit()
+    else:
+        db.session.commit()
 
     return jsonify({'message': 'Successful modification'}), 200
 
@@ -223,7 +223,8 @@ def undo_user_changes():
     filename = os.path.join(basedir, 'logs', f'{user_id}.log')
 
     try:
-        lines = open(filename).readlines()
+        file = open(filename)
+        lines = file.readlines()
         last_index = len(lines)
 
         with open(filename, 'r') as fr:
@@ -238,22 +239,23 @@ def undo_user_changes():
                     db.session.delete(entity)
                     db.session.commit()
                 elif i['commit_type'] == 'update':
-                    update_models[i['model_name']] = i['id']
+                    update_models.setdefault(i['model_name'], []).append(i['id'])
                 else:
                     model = getattr(importlib.import_module('models'), i['model_name'])()
                     update_model(model, i)
-                    print(model.__dict__)
                     db.session.add(model)
                     db.session.commit()
 
             if update_models:
                 fr.seek(0)
+                iter_counter = 0
                 for i, line in reversed(list(enumerate(fr.readlines()[:last_index - 1], 1))):
+
                     items_to_remove = {}
                     for j in json.loads(parse_log(line)[1]):
                         if j['model_name'] in update_models.keys() \
-                                and j['id'] == update_models[j['model_name']]:
-                            items_to_remove[j['model_name']] = j['id']
+                                and j['id'] in update_models[j['model_name']]:
+                            items_to_remove.setdefault(j['model_name'], []).append(j['id'])
                             # get model Class
                             model = getattr(importlib.import_module('models'), j['model_name'])
                             # get model instance
@@ -262,13 +264,22 @@ def undo_user_changes():
                             db.session.add(entity)
                             db.session.commit()
 
-                    update_models = dict(set(update_models.items()) - set(items_to_remove.items()))
+                    for r_key, r_value in items_to_remove.items():
+                        update_models[r_key] = list(set(update_models[r_key]) - set(r_value))
+                    else:
+                        update_models = {k: v for k, v in update_models.items() if v}
+
+                        if not update_models:
+                            break
+                    iter_counter += 1
 
         # remove extra lines
         with open(filename, 'w') as fw:
             for i, line in enumerate(lines):
                 if i < last_index - 1:
                     fw.write(line)
+            else:
+                file.close()
 
     except exc.SQLAlchemyError as e:
         return jsonify({'message': str(e.__dict__['orig'])}), 500
